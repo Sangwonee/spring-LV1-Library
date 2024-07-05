@@ -12,9 +12,8 @@ public class RentResponseDto {
 
     private Long rentId;
     private Long bookId;
+    private Long userId;
     private ReturnStatus returnStatus;
     private LocalDateTime rentDate;
     private LocalDateTime returnDate;
-
-
 }

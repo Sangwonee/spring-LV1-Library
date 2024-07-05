@@ -5,6 +5,8 @@ import com.sangwon.springlv2library.book.dto.BookResponseDto;
 import com.sangwon.springlv2library.book.entity.Book;
 import com.sangwon.springlv2library.book.repository.BookRepository;
 import com.sangwon.springlv2library.book.mapper.BookMapper;
+import com.sangwon.springlv2library.exception.BusinessLogicException;
+import com.sangwon.springlv2library.exception.ExceptionCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,11 +26,12 @@ public class BookService {
     }
 
     public BookResponseDto findBook(Long id){
-        Book book = bookRepository.findById(id).orElseThrow(() -> new RuntimeException("책을 찾을 수 없습니다."));
+        Book book = bookRepository.findById(id).orElseThrow(() -> new BusinessLogicException(ExceptionCode.BOOK_NOT_FOUND));
         return bookMapper.toResponseDto(book);
     }
 
     public List<BookResponseDto> findAllBooks(){
-        return bookMapper.toResponseDtos(bookRepository.findAll());
+        List<Book> books = bookRepository.findAllByOrderByRegistrationDateAsc();
+        return bookMapper.toResponseDtos(books);
     }
 }

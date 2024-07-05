@@ -21,4 +21,7 @@ public interface RentMapper {
     @Mapping(source = "user.name", target = "name")
     @Mapping(source = "user.phoneNumber", target = "phoneNumber")
     RentHistoryResponseDto toRentHistoryResponseDto(User user, List<RentDetailsDto> rentedBooks);
+
+    List<RentDetailsDto> toRentDetailsDtos(List<Rent> rents);
+
 }

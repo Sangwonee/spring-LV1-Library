@@ -1,6 +1,8 @@
 package com.sangwon.springlv2library.rent.entity;
 
+import com.sangwon.springlv2library.book.entity.Book;
 import com.sangwon.springlv2library.rent.dto.ReturnStatus;
+import com.sangwon.springlv2library.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,10 +20,13 @@ public class Rent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rentId;
-    @Column(nullable = false)
-    private Long bookId;
-    @Column(nullable = false)
-    private Long userId;
+
+    @ManyToOne
+    @JoinColumn(name = "book_id", nullable = false)
+    private Book book;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ReturnStatus returnStatus;

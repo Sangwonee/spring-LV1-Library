@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface RentRepository extends JpaRepository<Rent, Long> {
     Optional<Rent> findByBookIdAndUserIdAndReturnStatus(Long bookId, Long userId, ReturnStatus returnStatus);
     List<Rent> findByUserId(Long userId);
+
+    List<Rent> findByUserUserIdOrderByRentDateAsc(Long userId);
 }
