@@ -1,4 +1,4 @@
-package com.sangwon.springlv2library.user;
+package com.sangwon.springlv2library.user.entity;
 
 import jakarta.persistence.*;
 

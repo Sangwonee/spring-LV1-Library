@@ -1,4 +1,4 @@
-package com.sangwon.springlv2library.rent;
+package com.sangwon.springlv2library.book.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,17 +13,21 @@ import java.time.LocalDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Rent {
+public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long rentId;
-    @Column(nullable = false)
     private Long bookId;
     @Column(nullable = false)
-    private Long userId;
+    private String title;
     @Column(nullable = false)
-    private boolean returnStatus = false;
+    private String author;
+    @Column(nullable = false)
+    private String language;
+    @Column(nullable = false)
+    private String publisher;
+    @Column(nullable = false)
+    private boolean available;
     @Column(nullable = false, updatable = false)
-    private LocalDateTime rentDate = LocalDateTime.now();
-    private LocalDateTime returnDate;
+    private LocalDateTime registrationDate = LocalDateTime.now();
+
 }

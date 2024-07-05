@@ -1,5 +1,8 @@
-package com.sangwon.springlv2library.book;
+package com.sangwon.springlv2library.book.mapper;
 
+import com.sangwon.springlv2library.book.dto.BookPostDto;
+import com.sangwon.springlv2library.book.dto.BookResponseDto;
+import com.sangwon.springlv2library.book.entity.Book;
 import org.mapstruct.Mapper;
 
 import java.util.List;

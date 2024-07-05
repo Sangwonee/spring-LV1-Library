@@ -1,4 +1,4 @@
-package com.sangwon.springlv2library.user;
+package com.sangwon.springlv2library.user.dto;
 
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;

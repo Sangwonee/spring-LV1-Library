@@ -1,4 +1,4 @@
-package com.sangwon.springlv2library.user;
+package com.sangwon.springlv2library.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
