@@ -40,4 +40,11 @@ public class User {
     protected void onCreate() {
         penaltyEndDate = LocalDateTime.now();
     }
+    public boolean hasPenalty() {
+        return penaltyEndDate != null && LocalDateTime.now().isBefore(penaltyEndDate);
+    }
+
+    public void applyPenalty() {
+        penaltyEndDate = LocalDateTime.now().plusWeeks(2);
+    }
 }

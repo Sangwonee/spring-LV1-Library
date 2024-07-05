@@ -15,18 +15,21 @@ public class RentController {
 
     @PostMapping("/books/{bookId}/rents")
     public ResponseEntity<RentResponseDto> rentBook(@PathVariable Long bookId, @RequestHeader Long userId) {
-        RentResponseDto rentResponseDto = rentService.rentBook(bookId,userId);
+        RentResponseDto rentResponseDto = rentService.rentBook(bookId, userId);
         return new ResponseEntity<>(rentResponseDto, HttpStatus.CREATED);
     }
+
     @PatchMapping("/books/{bookId}/return")
-    public ResponseEntity<RentResponseDto> returnBook(@PathVariable Long bookId, @RequestHeader Long userId){
-        RentResponseDto rentResponseDto = rentService.returnBook(bookId,userId);
+    public ResponseEntity<RentResponseDto> returnBook(@PathVariable Long bookId, @RequestHeader Long userId) {
+        RentResponseDto rentResponseDto = rentService.returnBook(bookId, userId);
         return new ResponseEntity<>(rentResponseDto, HttpStatus.CREATED);
     }
+
     @GetMapping("/users/rents")
-    public ResponseEntity<RentHistoryResponseDto> getUserRentHistory(@RequestHeader Long userId){
-        RentHistoryResponseDto rentHistoryResponseDto = rentService.rentList(userId);
-        return new ResponseEntity<>(rentHistoryResponseDto,HttpStatus.OK);
+    public ResponseEntity<RentHistoryResponseDto> getUserRentHistory(@RequestHeader Long userId,
+                                                                     @RequestParam(defaultValue = "false") boolean includeReturned) {
+        RentHistoryResponseDto rentHistoryResponseDto = rentService.rentList(userId, includeReturned);
+        return new ResponseEntity<>(rentHistoryResponseDto, HttpStatus.OK);
     }
 
 }

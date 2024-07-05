@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RentRepository extends JpaRepository<Rent, Long> {
-    Optional<Rent> findByBookIdAndUserIdAndReturnStatus(Long bookId, Long userId, ReturnStatus returnStatus);
-    List<Rent> findByUserId(Long userId);
-
-    List<Rent> findByUserUserIdOrderByRentDateAsc(Long userId);
+    Optional<Rent> findByBookBookIdAndUserUserIdAndReturnStatus(Long bookId, Long userId, ReturnStatus returnStatus);
+    List<Rent> findByUserUserIdAndReturnStatus(Long userId, ReturnStatus returnStatus);
+    List<Rent> findByUserUserId(Long userId);
 }
