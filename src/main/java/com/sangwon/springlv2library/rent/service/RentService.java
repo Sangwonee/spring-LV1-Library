@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,11 +31,13 @@ public class RentService {
 
     @Transactional
     public RentResponseDto rentBook(Long bookId, Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+        User user = getUserId(userId);
 
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.BOOK_NOT_FOUND));
+        if (user.getPenaltyEndDate() != null && user.getPenaltyEndDate().isAfter(LocalDateTime.now())) {
+            throw new BusinessLogicException(ExceptionCode.USER_HAS_PENALTY);
+        }
+
+        Book book = getBookId(bookId);
 
         if (!book.isAvailable()) {
             throw new BusinessLogicException(ExceptionCode.BOOK_NOT_AVAILABLE);
@@ -57,32 +58,23 @@ public class RentService {
 
     @Transactional
     public RentResponseDto returnBook(Long bookId, Long userId) {
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
+        Rent rent = rentRepository.findByBookBookIdAndUserUserIdAndReturnStatus(bookId, userId, ReturnStatus.RENTED)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.RENT_NOT_FOUND));
 
-        if (user.hasPenalty()) {
-            throw new BusinessLogicException(ExceptionCode.USER_HAS_PENALTY);
+        if (rent.getRentDate().plusDays(7).isBefore(LocalDateTime.now())) {
+            User user = rent.getUser();
+            user.setPenaltyEndDate(LocalDateTime.now().plusWeeks(2));
+            userRepository.save(user);
         }
 
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.BOOK_NOT_FOUND));
+        rent.setReturnStatus(ReturnStatus.RETURNED);
+        rent.setReturnDate(LocalDateTime.now());
 
-        if (!book.isAvailable()) {
-            throw new BusinessLogicException(ExceptionCode.BOOK_NOT_AVAILABLE);
-        }
-
-        Rent rent = new Rent();
-        rent.setBook(book);
-        rent.setUser(user);
-        rent.setReturnStatus(ReturnStatus.RENTED);
-        rent.setRentDate(LocalDateTime.now());
-
-        book.setAvailable(false);
-
-        Rent savedRent = rentRepository.save(rent);
+        Book book = rent.getBook();
+        book.setAvailable(true);
         bookRepository.save(book);
 
-        return rentMapper.toResponseDto(savedRent);
+        return rentMapper.toResponseDto(rentRepository.save(rent));
     }
 
     @Transactional
@@ -100,5 +92,16 @@ public class RentService {
         List<RentDetailsDto> rentedBooks = rentMapper.toRentDetailsDtos(rents);
 
         return rentMapper.toRentHistoryResponseDto(user, rentedBooks);
+    }
+
+    private Book getBookId(Long bookId) {
+        return bookRepository.findById(bookId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.BOOK_NOT_FOUND));
+    }
+
+    private User getUserId(Long userId) {
+
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.USER_NOT_FOUND));
     }
 }

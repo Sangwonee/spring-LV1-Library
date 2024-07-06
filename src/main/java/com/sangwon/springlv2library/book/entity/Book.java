@@ -28,7 +28,7 @@ public class Book {
     @Column(nullable = false)
     private String publisher;
     @Column(nullable = false)
-    private boolean available;
+    private boolean available = true;
     @Column(nullable = false, updatable = false)
     private LocalDateTime registrationDate;
 
