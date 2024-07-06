@@ -35,8 +35,6 @@ dependencies {
 
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
-
-    implementation 'io.github.cdimascio:java-dotenv:5.2.2' //환경변수
 }
 
 tasks.named('test') {
